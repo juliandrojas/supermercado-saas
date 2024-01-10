@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../supabase/supabase';
+import { supabase } from '../supabase/supabase.js';
 import Navbar from './Navbar';
 
 function Login() {
