@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../supabase/supabase';
 import Navbar from './Navbar';
 
 function Login() {
@@ -9,21 +10,30 @@ function Login() {
     ],
   };
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Usuario:", username);
+    console.log("Email:", email);
     console.log("Contraseña:", password);
+    try {
+      const result = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      console.log(result);
+    } catch (error) {
+      console.log("Error en la autenticación: "+error);
+    }
   };
 
   return (
@@ -38,12 +48,12 @@ function Login() {
               <form onSubmit={handleSubmit}>
                 <div className="input-field">
                   <input
-                    id="username"
+                    id="email"
                     type="text"
-                    value={username}
-                    onChange={handleUsernameChange}
+                    value={email}
+                    onChange={handleEmailChange}
                   />
-                  <label htmlFor="username">Usuario</label>
+                  <label htmlFor="email">Usuario</label>
                 </div>
                 <div className="input-field">
                   <input
@@ -54,9 +64,23 @@ function Login() {
                   />
                   <label htmlFor="password">Contraseña</label>
                 </div>
-                <button className="btn waves-effect waves-light" type="submit">
-                  Iniciar Sesión
-                </button>
+                <div className="row">
+                  <div className="col s6">
+                    <button
+                      className="btn waves-effect waves-light"
+                      type="submit"
+                    >
+                      <i className="material-icons right">lock</i>
+                      Iniciar Sesión
+                    </button>
+                  </div>
+                  <div className="col s6">
+                    <a href="/register" className="btn waves-wffect waves-light">
+                    <i className="material-icons right">person_add</i>
+                      Registrarse
+                    </a>
+                  </div>
+                </div>
               </form>
             </div>
             <div className="card-action">
